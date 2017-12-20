@@ -7,6 +7,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
+#include <QDebug>
+#include <QDir>
 #include <cstdlib>
 #include <ctime>
 
@@ -17,13 +19,26 @@ class Lottery : public QObject
 public:
     Lottery() {
         srand(time(NULL));
+        if (QFile::exists("range.txt")) {
+            QFile rangeFile("range.txt");
+            if (rangeFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                QTextStream in(&rangeFile);
+                QString trash;
+                in >> trash >> mStart;
+                in >> trash >> mStop;
+                rangeFile.close();
+            }
+        }
+        if (!QDir("prizes").exists()) {
+            QDir().mkdir("prizes");
+        }
     }
 
 public:
     QString getRandom() {
         QString prize;
         do {
-            prize = QString::number(rand() % 500 + 1);
+            prize = QString::number(rand() % (mStop - mStart) + mStart);
         } while(isDuplicated(prize));
         return prize;
     }
@@ -31,11 +46,15 @@ public:
     Q_INVOKABLE QStringList getLuckyPrizes(bool accepted = false) {
         QStringList results;
         for(int i = 0; i < 10; i++) {
-            results << getRandom();
+            QString prize;
+            do {
+                prize = getRandom();
+            } while (results.contains(prize));
+            results << prize;
         }
         if (accepted) {
             mLuckPrizes = results;
-            QFile file("lucky_prize.txt");
+            QFile file("prizes/lucky_prize.txt");
             if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ");
@@ -53,7 +72,7 @@ public:
         QString prize = getRandom();
         if (accepted) {
             mFirstPrize = prize;
-            QFile file("first_prize.txt");
+            QFile file("prizes/first_prize.txt");
             if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ") << prize << endl;
@@ -67,7 +86,7 @@ public:
         QString prize = getRandom();
         if (accepted) {
             mPatchPrizes.append(prize);
-            QFile file("patch_prize.txt");
+            QFile file("prizes/patch_prize.txt");
             if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ") << prize << endl;
@@ -80,11 +99,15 @@ public:
     Q_INVOKABLE QStringList getSecondPrizes(bool accepted = false) {
         QStringList results;
         for(int i = 0; i < 2; i++) {
-            results << getRandom();
+            QString prize;
+            do {
+                prize = getRandom();
+            } while (results.contains(prize));
+            results << prize;
         }
         if (accepted) {
             mLuckPrizes = results;
-            QFile file("second_prize.txt");
+            QFile file("prizes/second_prize.txt");
             if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ");
@@ -101,11 +124,15 @@ public:
     Q_INVOKABLE QStringList getThirdPrizes(bool accepted = false) {
         QStringList results;
         for(int i = 0; i < 3; i++) {
-            results << getRandom();
+            QString prize;
+            do {
+                prize = getRandom();
+            } while (results.contains(prize));
+            results << prize;
         }
         if (accepted) {
             mLuckPrizes = results;
-            QFile file("third_prize.txt");
+            QFile file("prizes/third_prize.txt");
             if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ");
@@ -131,6 +158,7 @@ private:
     QStringList mSecondPrize;
     QStringList mThirdPrize;
     QStringList mPatchPrizes;
+    int mStart = 1, mStop = 501;
 };
 
 #endif // __RANDOM_H__
