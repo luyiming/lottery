@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>SecondPanel.qml</file>
+        <file>FirstPanel.qml</file>
+        <file>ThirdPanel.qml</file>
+        <file>LuckyPanel.qml</file>
+        <file>PatchPanel.qml</file>
+    </qresource>
+</RCC>
