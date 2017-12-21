@@ -55,7 +55,7 @@ public:
         if (accepted) {
             mLuckPrizes = results;
             QFile file("prizes/lucky_prize.txt");
-            if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ");
                 for(int i = 0; i < 10; i++) {
@@ -73,7 +73,7 @@ public:
         if (accepted) {
             mFirstPrize = prize;
             QFile file("prizes/first_prize.txt");
-            if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ") << prize << endl;
                 file.close();
@@ -87,7 +87,7 @@ public:
         if (accepted) {
             mPatchPrizes.append(prize);
             QFile file("prizes/patch_prize.txt");
-            if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ") << prize << endl;
                 file.close();
@@ -108,7 +108,7 @@ public:
         if (accepted) {
             mLuckPrizes = results;
             QFile file("prizes/second_prize.txt");
-            if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ");
                 for(int i = 0; i < 2; i++) {
@@ -133,7 +133,7 @@ public:
         if (accepted) {
             mLuckPrizes = results;
             QFile file("prizes/third_prize.txt");
-            if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
                 QTextStream out(&file);
                 out << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss >>> ");
                 for(int i = 0; i < 3; i++) {
